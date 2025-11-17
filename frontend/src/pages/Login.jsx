@@ -87,157 +87,213 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white flex flex-col items-center justify-center py-10 px-6 font-[Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',sans-serif]">
+    <div className="min-h-screen w-full flex items-stretch justify-center bg-white">
+      {/* Loading Overlay */}
       {loading && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[1000]">
-          <div className="flex flex-col items-center gap-4 bg-white p-10 rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
-            <div className="w-12 h-12 border-4 border-gray-200 border-t-blue-900 rounded-full animate-spin"></div>
-            <p className="text-base text-[#1a1a1a] font-medium">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="flex flex-col items-center gap-4 bg-white p-10 rounded-lg shadow-2xl">
+            <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-900 rounded-full animate-spin"></div>
+            <p className="text-base text-gray-900 font-medium">
               Just a moment, logging you in...
             </p>
           </div>
         </div>
       )}
 
-      <div className="max-w-6xl w-full flex flex-col md:flex-row items-start gap-10 md:gap-16">
-        {/* Left column */}
-        <div className="flex flex-col gap-12 flex-1 md:flex-[0_0_48%]">
-          <img src="/logo.png" alt="SigmaDS Logo" className="h-10 w-auto" />
+      <div className="flex flex-1 min-h-screen w-full bg-white flex-col md:flex-row">
+        {/* Left Section - Form */}
+        <div className="flex-1 md:w-5/12 flex items-center justify-center bg-white px-6 py-12 md:px-12 md:py-20 order-2 md:order-1">
+          <div className="w-full max-w-sm">
+            <img
+              src="/logo.png"
+              alt="SigmaDS Logo"
+              className="h-10 md:h-12 mb-8 md:mb-12 object-contain"
+            />
 
-          <form
-            onSubmit={handleLogin}
-            className="bg-white border border-gray-100 rounded-2xl shadow-[0_20px_60px_rgba(15,23,42,0.07)] px-8 py-10 flex flex-col gap-6"
-          >
-            <div>
-              <h1 className="text-3xl font-semibold text-[#171717]">
+            <div className="mt-4">
+              <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2">
                 Login to your Account
               </h1>
-              <p className="text-base text-gray-500 mt-2">
+              <p className="text-sm md:text-base text-gray-600 mb-8">
                 Please enter your details to login
               </p>
-            </div>
 
-            {/* Username */}
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="username"
-                className="text-sm font-medium text-[#1a1a1a]"
+              <form
+                onSubmit={handleLogin}
+                className="flex flex-col gap-4 md:gap-5"
               >
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  if (error) setError("");
-                }}
-                className={`p-3 border rounded-lg text-sm transition-all duration-200 bg-white focus:outline-none focus:border-blue-700 focus:shadow-[0_0_0_4px_rgba(59,130,246,0.12)] ${
-                  error ? "border-red-600 bg-red-50" : "border-gray-200"
-                }`}
-              />
-            </div>
+                {/* Username Field */}
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="username"
+                    className="text-sm font-medium text-gray-900"
+                  >
+                    Username
+                  </label>
+                  <input
+                    id="username"
+                    type="text"
+                    placeholder="Enter your username"
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                      if (error) setError("");
+                    }}
+                    className={`px-3 py-2 border rounded-md text-sm transition-all duration-200 bg-white focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700 ${
+                      error
+                        ? "border-red-500 bg-red-50"
+                        : "border-gray-300 hover:border-gray-400"
+                    }`}
+                  />
+                  {error && (
+                    <p className="text-xs text-red-600 flex items-center gap-1">
+                      <span>⚠️</span>
+                      {error}
+                    </p>
+                  )}
+                </div>
 
-            {/* Password */}
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium text-[#1a1a1a]"
-              >
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-3 pr-12 border border-gray-200 rounded-lg text-sm transition-all duration-200 bg-white focus:outline-none focus:border-blue-700 focus:shadow-[0_0_0_4px_rgba(59,130,246,0.12)]"
-                />
+                {/* Password Field */}
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-900"
+                  >
+                    Password
+                  </label>
+                  <div className="relative flex items-center">
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="flex-1 px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm transition-all duration-200 bg-white hover:border-gray-400 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-blue-700"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 bg-transparent border-0 cursor-pointer text-lg text-gray-400 hover:text-gray-600 transition-colors duration-200 p-0"
+                    >
+                      {showPassword ? "👁️" : "👁️"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Checkbox and Link */}
+                <div className="flex justify-between items-center mt-2 flex-wrap gap-2">
+                  <label className="flex items-center gap-2 text-sm cursor-pointer text-gray-900">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="w-4 h-4 cursor-pointer accent-blue-700"
+                    />
+                    <span>Remember Me</span>
+                  </label>
+                  <a
+                    href="#"
+                    className="text-sm text-blue-700 hover:text-blue-600 transition-colors duration-200"
+                  >
+                    Forgot Password?
+                  </a>
+                </div>
+
+                {/* Login Button */}
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-gray-400 hover:text-gray-600 transition-colors"
+                  type="submit"
+                  className="px-4 py-2.5 bg-gradient-to-r from-blue-700 to-blue-900 text-white border-0 rounded-md text-sm font-semibold cursor-pointer transition-all duration-200 mt-6 shadow-md hover:shadow-lg hover:from-blue-600 hover:to-blue-800 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600 disabled:shadow-none"
+                  disabled={loading}
                 >
-                  {showPassword ? "👁️" : "👁️"}
+                  {loading ? "Logging in..." : "Login"}
                 </button>
-              </div>
+              </form>
             </div>
-
-            {/* Error */}
-            {error && (
-              <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-lg">
-                <span>⚠️</span>
-                {error}
-              </div>
-            )}
-
-            {/* Remember + Forgot */}
-            <div className="flex items-center justify-between text-sm text-[#1a1a1a]">
-              <label className="flex items-center gap-2 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 accent-blue-800"
-                />
-                Remember Me
-              </label>
-              <a
-                href="#"
-                className="text-blue-900 font-medium hover:text-blue-700 transition-colors"
-              >
-                Forgot Password?
-              </a>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-4 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#0055D4] to-[#112B8C] text-white font-semibold text-base py-3 shadow-[0_12px_32px_rgba(0,79,204,0.35)] transition-all hover:shadow-[0_16px_40px_rgba(0,79,204,0.4)] active:translate-y-px disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </form>
+          </div>
         </div>
 
-        {/* Right column */}
-        <div className="flex-1 w-full flex flex-col items-center gap-10">
-          <img src="/logo.png" alt="SigmaDS Logo" className="h-12 w-auto" />
+        {/* Right Section - Promotional */}
+        <div className="flex-1 md:w-7/12 bg-white flex flex-col items-center justify-center p-6 md:p-12 min-h-80 md:min-h-screen order-1 md:order-2">
+          {/* Content */}
+          <div className="flex flex-col items-center justify-center gap-6 w-full">
+            {/* Logo */}
+            <img
+              src="/logo.png"
+              alt="SigmaDS Logo"
+              className="w-32 md:w-40 h-auto"
+            />
 
-          <img
-            src="/coverImage.png"
-            alt="Screens showcase"
-            className="w-full max-w-2xl rounded-2xl object-contain"
-          />
+            {/* Screens/Cover Image */}
+            <img
+              src="/coverImage.png"
+              alt="Screens"
+              className="w-full max-w-md md:max-w-2xl h-auto"
+            />
 
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-500">
+            {/* Trust Text */}
+            <p className="text-sm md:text-base text-gray-600 font-medium text-center">
               Trusted by 1000+ customers globally
             </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-8 grayscale opacity-80">
-              {[
-                "amazon",
-                "deca",
-                "bosch",
-                "uni",
-                "para",
-                "etisalat",
-                "uber",
-                "benz",
-                "tt",
-                "ap",
-              ].map((brand) => (
+
+            {/* Partner Container */}
+            <div className="w-full max-w-3xl mt-4">
+              {/* First Partner Row */}
+              <div className="flex items-center justify-center gap-3 md:gap-6 flex-wrap mb-4">
                 <img
-                  key={brand}
-                  src={`https://d2qf6k8jfqd09k.cloudfront.net/login/${brand}.svg`}
-                  alt={brand}
-                  className="h-8 w-auto"
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/amazon.svg"
+                  alt="Amazon"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
                 />
-              ))}
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/deca.svg"
+                  alt="Deca"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/bosch.svg"
+                  alt="Bosch"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/uni.svg"
+                  alt="Uni"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/para.svg"
+                  alt="Para"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+              </div>
+
+              {/* Second Partner Row */}
+              <div className="flex items-center justify-center gap-3 md:gap-6 flex-wrap">
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/etisalat.svg"
+                  alt="Etisalat"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/uber.svg"
+                  alt="Uber"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/benz.svg"
+                  alt="Benz"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/tt.svg"
+                  alt="TT"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+                <img
+                  src="https://d2qf6k8jfqd09k.cloudfront.net/login/ap.svg"
+                  alt="AP"
+                  className="h-6 md:h-8 w-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+              </div>
             </div>
           </div>
         </div>
