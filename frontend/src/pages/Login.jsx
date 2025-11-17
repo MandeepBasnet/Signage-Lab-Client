@@ -3,9 +3,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearAuth, saveAuth } from "../utils/auth.js";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api";
+import { loginWithXibo } from "../api/auth.js";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -43,30 +41,29 @@ export default function Login() {
     try {
       clearAuth();
 
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginBody),
+      // Authenticate with backend (which handles session/cookies)
+      const response = await loginWithXibo(
+        loginBody.username,
+        loginBody.password
+      );
+
+      // The response now contains either:
+      // 1. access_token + sessionId (for OAuth)
+      // 2. sessionCookie + user info (for session-based auth)
+      let userInfo = response.user || {
+        userId: null,
+        userName: loginBody.username,
+        email: null,
+      };
+
+      // Save the auth token (can be access_token or sessionCookie)
+      const token = response.access_token || response.sessionCookie;
+
+      saveAuth(token, {
+        username: userInfo?.userName || loginBody.username,
+        email: userInfo?.email || null,
+        userId: userInfo?.userId || null,
       });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        const message =
-          data?.message ||
-          (response.status === 401
-            ? "Invalid username or password."
-            : "Unable to login. Please try again.");
-        throw new Error(message);
-      }
-
-      if (!data?.token) {
-        throw new Error("Login succeeded but no token was returned.");
-      }
-
-      saveAuth(data.token, data.user ?? null);
 
       if (!rememberMe) {
         window.addEventListener(
